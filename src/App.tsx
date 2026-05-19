@@ -21,7 +21,6 @@ const tabs: TabType[] = [
 
 const TabsPage = () => {
   const { tabId } = useParams();
-
   const tabIndex = tabs.findIndex(tab => tab.id === tabId);
 
   return (
@@ -29,25 +28,31 @@ const TabsPage = () => {
       <h1 className="title">Tabs page</h1>
 
       <Tabs selectedIndex={tabIndex} onSelect={() => {}}>
-        <div className="tabs is-boxed">
-          <TabList>
-            {tabs.map(tab => (
-              <Tab
-                key={tab.id}
-                data-cy="Tab"
-                className={tab.id === tabId ? 'is-active' : ''}
-              >
-                <Link to={`/tabs/${tab.id}`}>{tab.title}</Link>
-              </Tab>
-            ))}
-          </TabList>
-        </div>
+        <TabList className="tabs is-boxed custom-tab-list">
+          {tabs.map(tab => (
+            <Tab
+              key={tab.id}
+              data-cy="Tab"
+              className={tab.id === tabId ? 'is-active' : ''}
+            >
+              <Link to={`/tabs/${tab.id}`}>{tab.title}</Link>
+            </Tab>
+          ))}
+        </TabList>
 
-        <div className="block" data-cy="TabContent">
-          {tabIndex === -1
-            ? 'Please select a tab'
-            : tabs.map(tab => <TabPanel key={tab.id}>{tab.content}</TabPanel>)}
-        </div>
+        {tabIndex === -1 && (
+          <div className="block" data-cy="TabContent">
+            Please select a tab
+          </div>
+        )}
+
+        {tabs.map(tab => (
+          <TabPanel key={tab.id}>
+            <div className="block" data-cy="TabContent">
+              {tab.content}
+            </div>
+          </TabPanel>
+        ))}
       </Tabs>
     </>
   );
